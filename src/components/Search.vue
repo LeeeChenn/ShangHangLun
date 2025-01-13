@@ -50,6 +50,7 @@ const removeHistory = (index: number) => {
 const clearHistory = () => {
   useHistoryStoreHook().clearHistory();
 }
+
 </script>
 
 <template>
@@ -73,17 +74,33 @@ const clearHistory = () => {
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
           </div>
+          <div class="mt-2 text-sm text-gray-500">
+            <span class="mr-1">搜索语法：</span>
+            <span class="px-1.5 py-0.5 bg-gray-100 rounded text-gray-700 font-mono">空格</span>
+            <span class="mx-1">表示且，</span>
+            <span class="px-1.5 py-0.5 bg-gray-100 rounded text-gray-700 font-mono">|</span>
+            <span class="ml-1">表示或。</span>
+            <div class="mt-1.5 text-gray-500">
+              <span class="mr-1">搜索示例：</span>
+              <span class="px-1.5 py-0.5 bg-gray-100 rounded text-gray-700 font-mono">桂枝 甘草 大枣</span>
+              <span class="mx-1">或</span>
+              <span class="px-1.5 py-0.5 bg-gray-100 rounded text-gray-700 font-mono">干姜|生姜 甘草</span>
+            </div>
+          </div>
         </div>
 
         <!-- 搜索历史 -->
         <div v-if="searchHistory.length > 0" class="p-3">
           <div class="flex justify-between items-center px-2 py-1">
             <span class="text-sm text-gray-500">搜索历史</span>
-            <button 
-              @click="clearHistory"
-              class="text-sm text-blue-500 hover:text-blue-600 transition-colors">
-              清空
-            </button>
+            <span>
+              <button 
+                @click="clearHistory"
+                class="text-sm text-red-500 hover:text-red-600 transition-colors mr-2">
+                清空
+              </button>
+            </span>
+            
           </div>
           <ul class="mt-1 max-h-[320px] overflow-y-auto custom-scrollbar">
             <li v-for="(item, index) in searchHistory" 

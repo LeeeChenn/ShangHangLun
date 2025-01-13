@@ -29,6 +29,10 @@ const isMatch = (keywords: string[][], text: string) => {
     return isMatch;
 }
 
+const getChineseText = (text: string) => {
+    return text.match(ChineseRegex)?.join('') || '';
+}
+
 export const searchByQuery = (query: string): SearchResult[] => {
     if (!query || query.trim().length === 0) {
         return []
@@ -37,17 +41,19 @@ export const searchByQuery = (query: string): SearchResult[] => {
     if (andKeywords.length === 0) {
         return []
     }
-    const keywords = andKeywords.map(keyword => keyword.split(OrSperator).filter(char => char.trim().length > 0))
+    const keywords = andKeywords.map(keyword => keyword.split(OrSperator).map(char => getChineseText(char)).filter(char => char.length > 0))
                         .filter(keyword => keyword.length > 0);
     if (keywords.length === 0) {
         return []
     }
+    console.log('keywords');
+    console.log(keywords);
     const articles = useArticleStoreHook().getPureArticles;
     const formulas = useFormulaStoreHook().formulas;
     const results: SearchResult[] = [];
 
     for (const article of articles) {
-        let text = article.text.match(ChineseRegex)?.join('') || '';
+        let text = getChineseText(article.text);
         if (isMatch(keywords, text)) {
             results.push({ data: article, type: SearchType.Article });
         }
@@ -58,10 +64,10 @@ export const searchByQuery = (query: string): SearchResult[] => {
             text += ',' + item[0] + ',' + item[1] + ',' + item[2];
         })
         if (formula.fa) {
-            text += ',' + formula.fa.match(ChineseRegex)?.join('') || '';
+            text += ',' + getChineseText(formula.fa);
         }
         if (formula.zhu) {
-            text += ',' + formula.zhu.match(ChineseRegex)?.join('') || '';
+            text += ',' + getChineseText(formula.zhu);
         }
         if (isMatch(keywords, text)) {
             results.push({ data: formula, type: SearchType.Formula });
