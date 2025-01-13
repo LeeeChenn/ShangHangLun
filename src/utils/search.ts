@@ -37,7 +37,8 @@ export const searchByQuery = (query: string): SearchResult[] => {
     if (!query || query.trim().length === 0) {
         return []
     }
-    const andKeywords = query.split(AndSperator).filter(char => char.trim().length > 0);
+    let result = query.trim().replace(/\s*\|\s*/g, "|");  // 去除 | 前后的空格
+    const andKeywords = result.split(AndSperator).filter(char => char.trim().length > 0);
     if (andKeywords.length === 0) {
         return []
     }

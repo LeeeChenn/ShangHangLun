@@ -73,6 +73,9 @@ defineExpose({
                     @click="formulaIsExpanded = !formulaIsExpanded">
                     <span class="text-gray-400 font-medium w-full px-2 py-1 rounded leading-relaxed">
                         方剂
+                        <span class="ml-2 px-1.5 py-0.5 text-xs bg-gray-100 text-gray-500 rounded-full">
+                            {{ formulas.length }}
+                        </span>
                     </span>
                     <span class="text-gray-400">
                         <svg :class="{'rotate-180': !formulaIsExpanded}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
@@ -94,6 +97,9 @@ defineExpose({
                     @click="articleIsExpanded = !articleIsExpanded">
                     <span class="text-gray-400 font-medium w-full px-2 py-1 rounded leading-relaxed">
                         条文
+                        <span class="ml-2 px-1.5 py-0.5 text-xs bg-gray-100 text-gray-500 rounded-full">
+                            {{ articles.length }}
+                        </span>
                     </span>
                     <span class="text-gray-400 text-lg">
                         <svg :class="{'rotate-180': !articleIsExpanded}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">

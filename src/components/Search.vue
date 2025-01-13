@@ -51,6 +51,11 @@ const clearHistory = () => {
   useHistoryStoreHook().clearHistory();
 }
 
+const clickExample = (query: string) => {
+  searchQuery.value = query;
+  document.querySelector<HTMLInputElement>('.search-input')?.focus();
+}
+
 </script>
 
 <template>
@@ -82,9 +87,9 @@ const clearHistory = () => {
             <span class="ml-1">表示或。</span>
             <div class="mt-1.5 text-gray-500">
               <span class="mr-1">搜索示例：</span>
-              <span class="px-1.5 py-0.5 bg-gray-100 rounded text-gray-700 font-mono">桂枝 甘草 大枣</span>
-              <span class="mx-1">或</span>
-              <span class="px-1.5 py-0.5 bg-gray-100 rounded text-gray-700 font-mono">干姜|生姜 甘草</span>
+              <span class="px-1.5 py-0.5 bg-blue-100 rounded text-gray-700 font-mono cursor-pointer" @click="clickExample('桂枝 甘草')">桂枝 甘草</span>
+              <span class="mx-1">，</span>
+              <span class="px-1.5 py-0.5 bg-blue-100 rounded text-gray-700 font-mono cursor-pointer" @click="clickExample('干姜|生姜 甘草')">干姜|生姜 甘草</span>
             </div>
           </div>
         </div>
