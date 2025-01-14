@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { SearchResult, SearchType } from '@/utils/search';
-import { ref } from 'vue';
+import { ref, nextTick } from 'vue';
 import Card from '@/components/Card.vue';
 import FormulaDetail from '@/pages/FormulaDetail.vue';
 import { type Formula, type Article } from '@/store/utils';
@@ -12,6 +12,10 @@ const formulas = ref<Formula[]>([]);
 const articleIsExpanded = ref(true);
 const articles = ref<Article[]>([]);
 const query = ref<string>('');
+interface CardExpose {
+  scrollToTop: () => void;
+}
+const cardRef = ref<CardExpose | null>(null);
 //
 const currentPage = ref(0); // 0 查询页， 1 方剂详情
 const formulaIndex = ref(0);
@@ -28,6 +32,11 @@ const setData = (text: string, results: SearchResult[]) => {
             formulas.value.push(result.data as Formula);
         } else {
             articles.value.push(result.data as Article);
+        }
+    });
+    nextTick(() => {
+        if (cardRef.value) {
+            cardRef.value.scrollToTop();
         }
     });
 }
@@ -58,7 +67,7 @@ defineExpose({
 
 <template>
     <div>
-        <Card v-show="currentPage === 0">
+        <Card ref="cardRef" v-show="currentPage === 0">
             <template #header>
                 <div class="relative flex items-center justify-between w-full">
                     <div class="flex items-center">
