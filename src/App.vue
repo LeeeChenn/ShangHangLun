@@ -1,21 +1,22 @@
 <script lang="ts" setup>
-import { ref, computed, nextTick } from 'vue';
-import { type Article, type Formula } from '@/store/utils';
+import { ref, computed, nextTick, getCurrentInstance } from 'vue';
+import { type Article } from '@/store/utils';
 import { PageType, type PageData } from './pages/type';
 // Search
 import Search from '@/components/Search.vue';
 import SearchResultPage from './pages/SearchResult.vue';
-import { searchByQuery, SearchResult } from '@/utils/search';
+import { searchByQuery } from '@/utils/search';
 // Article
 import ArticleList from './pages/ArticleList.vue';
 import ArticleChapter from './pages/ArticleChapter.vue';
 import { useArticleStoreHook } from '@/store/modules/article';
 // Formula
 import FormulaList from './pages/FormulaList.vue';
-import FormulaDetail from './pages/FormulaDetail.vue';
-import { useFormulaStoreHook } from '@/store/modules/formula';
+
 const current = ref(PageType.List);
 const prevs = ref<PageType[]>([]); 
+
+const { proxy } = getCurrentInstance()!;
 
 const gotoPage = (page: number, data?: PageData) => {
   if (current.value === page) return;
@@ -23,8 +24,6 @@ const gotoPage = (page: number, data?: PageData) => {
   current.value = page;
   if (page === PageType.Chapter) {
     selectChapter(data!.data as Article, data!.index);
-  } else if (page === PageType.Formula) {
-    selectFormula(data!.data as Formula, data!.index);
   }
 }
 
@@ -86,28 +85,6 @@ const nextArticle = () => {
 }
 
 /**
- * Formula
- **/
-const formulas = computed<Formula[]>(() => useFormulaStoreHook().getFormulas);
-const currentFormulaIndex = ref(0);
-const selectFormula = (formula: Formula, index: number) => {
-  let _ = formula
-  currentFormulaIndex.value = index;
-}
-
-const prevFormula = () => {
-  if (currentFormulaIndex.value > 0) {
-    currentFormulaIndex.value--;
-  }
-}
-
-const nextFormula = () => {
-  if (currentFormulaIndex.value < formulas.value.length - 1) {
-    currentFormulaIndex.value++;
-  }
-}
-
-/**
  * Search
  **/
 const showSearch = ref(false);
@@ -121,22 +98,29 @@ const closeSearch = () => {
   showSearch.value = false;
 }
 
-const onSearch = (query: string) => {
+const onSearch = (query: string): boolean => {
   const results = searchByQuery(query);
+  if (results.length === 0) {
+    proxy?.$toast.show('未找到相关内容');
+    return false;
+  }
   nextTick(() => {
     searchResultPage.value?.setData(query, results);
   });
   gotoPage(PageType.Search);
+  return true;
 }
 
 </script>
 
 <template>
-  <ArticleList 
+  <div>
+    <ArticleList 
     v-show="current === PageType.List" 
     :list="list" 
     @goto-page="gotoPage" 
     @search="search" />
+
   <ArticleChapter 
     v-if="current === PageType.Chapter" 
     :datas="datas" 
@@ -147,16 +131,8 @@ const onSearch = (query: string) => {
     />
   <FormulaList 
     v-show="current === PageType.FormulaList" 
-    :need-letter="true"
     @goto-page="gotoPage" 
     @search="search" />
-  <FormulaDetail 
-    v-if="current === PageType.Formula" 
-    :data="formulas[currentFormulaIndex]"
-    @back="back"
-    @prev="prevFormula"
-    @next="nextFormula"
-    />
 
   <Search 
     :visible="showSearch" 
@@ -165,10 +141,12 @@ const onSearch = (query: string) => {
 
   <SearchResultPage 
     ref="searchResultPage"
-    v-show="current === PageType.Search" 
+    v-if="current === PageType.Search" 
     @back="back" 
     @goto-page="gotoPage"
     @search="search" />
+  </div>
+  
 
 </template>
 

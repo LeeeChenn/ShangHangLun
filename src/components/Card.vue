@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, onUpdated, onBeforeUnmount } from 'vue';
+import { onMounted, onUnmounted, ref, onUpdated, onBeforeUnmount, nextTick } from 'vue';
 defineSlots<{
   header?: () => any;
   default: () => any;
@@ -23,15 +23,16 @@ const scrollToTop = () => {
 };
 
 const updateLetterPosition = () => {
-  if (contentRef.value) {
-    const rect = contentRef.value.getBoundingClientRect()
-    document.documentElement.style.setProperty('--content-top', `${rect.top - 33}px`)
-    document.documentElement.style.setProperty('--content-height', `${rect.height}px`)
-  }
+    nextTick(() => {
+      if (contentRef.value) {
+        const rect = contentRef.value.getBoundingClientRect()
+        document.documentElement.style.setProperty('--content-top', `${rect.top - 33}px`)
+        document.documentElement.style.setProperty('--content-height', `${rect.height}px`)
+      }
+    })
 }
 
 onMounted(() => {
-  // const content = document.querySelector('.content');
   const content = contentRef.value
   if (!content) return;
   content.addEventListener('scroll', () => {

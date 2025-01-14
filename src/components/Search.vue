@@ -5,7 +5,7 @@ import { useHistoryStoreHook } from '@/store/modules/history';
 const props = defineProps<{
   visible: boolean,
   onClose: () => void,
-  onSearch: (query: string) => void,
+  onSearch: (query: string) => boolean,
 }>();
 
 const searchQuery = ref('');
@@ -27,11 +27,12 @@ const selectHistory = (query: string) => {
 
 const handleSearch = () => {
   if (!searchQuery.value.trim()) return;
+  const result = props.onSearch(searchQuery.value);
+  if (!result) return;
   if (searchHistory.includes(searchQuery.value)) {
     useHistoryStoreHook().removeHistory(searchHistory.indexOf(searchQuery.value));
   }
   useHistoryStoreHook().addHistory(searchQuery.value);
-  props.onSearch(searchQuery.value);
   searchQuery.value = '';
   props.onClose(); // 搜索后关闭对话框
 }

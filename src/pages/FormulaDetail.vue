@@ -10,13 +10,13 @@ import { formatText } from '@/utils/format';
 const props = defineProps({
     data: {
         type: Object as PropType<Formula>,
-        required: true
+        required: false
     }
 });
 const emit = defineEmits(['back', 'prev', 'next']);
 const articleStore = useArticleStoreHook();
 const fang = computed(() => {
-    return props.data.Hname || props.data.name;
+    return props.data ? (props.data?.Hname || props.data.name) : '';
 });
 const articles = computed(() => articleStore.getListByFang(fang.value));
 
