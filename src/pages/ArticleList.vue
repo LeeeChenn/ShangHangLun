@@ -8,12 +8,7 @@ import { useArticleStoreHook } from '@/store/modules/article';
 import MainHeader from '@/components/MainHeader.vue';
 
 const emit = defineEmits(['goto-page', 'search']);
-// const props = defineProps({
-//     list: {
-//         type: Array as PropType<Article[]>,
-//         required: true
-//     }
-// })
+
 const articles = computed<Article[]>(() => useArticleStoreHook().getArticles);
 const list = computed<Article[]>(() => useArticleStoreHook().getList);
 const currentPage = ref(0); // 0 list, 1 chapter
