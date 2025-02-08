@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SearchResult, SearchType } from '@/utils/search';
+import { SearchResult, SearchType, parseKeywords, fillText } from '@/utils/search';
 import { ref, nextTick } from 'vue';
 import Card from '@/components/Card.vue';
 import FormulaDetail from '@/pages/FormulaDetail.vue';
@@ -27,13 +27,26 @@ const setData = (text: string, results: SearchResult[]) => {
     formulaIsExpanded.value = true;
     articleIsExpanded.value = true;
     currentPage.value = 0;
+
+    let tempArticles: Article[] = [];
     results.forEach(result => {
         if (result.type === SearchType.Formula) {
             formulas.value.push(result.data as Formula);
         } else {
-            articles.value.push(result.data as Article);
+            tempArticles.push(result.data as Article);
         }
     });
+    // 填充关键词样式
+    const keywords = parseKeywords(query.value);
+    for (const item of tempArticles) {
+        const result = fillText(item.text, keywords);
+
+        articles.value.push({
+            ...item,
+            text: result
+        });
+    }
+
     nextTick(() => {
         if (cardRef.value) {
             cardRef.value.scrollToTop();
