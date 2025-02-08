@@ -63,7 +63,7 @@ const clickExample = (query: string) => {
   <Teleport to="body" v-if="visible">
     <div class="fixed inset-0 bg-black/25 flex items-start justify-center z-50 backdrop"
       @click="handleBackdropClick">
-      <div class="bg-white w-[600px] mr-1 ml-1 rounded-lg shadow-xl mt-[6vh]" @click.stop>
+      <div class="bg-white w-[600px] mr-1 ml-1 rounded-lg shadow-xl mt-[2vh] sm:mt-[6vh]" @click.stop>
         <!-- 搜索框 -->
         <div class="p-4"
           :class="{ 'border-b border-gray-100': searchHistory.length > 0 }"

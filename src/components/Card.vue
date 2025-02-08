@@ -26,7 +26,8 @@ const updateLetterPosition = () => {
     nextTick(() => {
       if (contentRef.value) {
         const rect = contentRef.value.getBoundingClientRect()
-        document.documentElement.style.setProperty('--content-top', `${rect.top - 33}px`)
+        document.documentElement.style.setProperty('--content-top', `${rect.top}px`)
+        // document.documentElement.style.setProperty('--content-top', `${rect.top - 33}px`)
         document.documentElement.style.setProperty('--content-height', `${rect.height}px`)
       }
     })
@@ -35,14 +36,21 @@ const updateLetterPosition = () => {
 onMounted(() => {
   const content = contentRef.value
   if (!content) return;
-  content.addEventListener('scroll', () => {
-    content.classList.remove('scrollbar-hide');
-    if (scrollTimer) clearTimeout(scrollTimer);
-    
-    scrollTimer = setTimeout(() => {
-      content.classList.add('scrollbar-hide');
-    }, 2000); 
-  });
+
+  // 检查是否为移动设备
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+  if (isMobile) {
+    content.classList.add('scrollbar-hide');
+  } else {
+    content.addEventListener('scroll', () => {
+      content.classList.remove('scrollbar-hide');
+      if (scrollTimer) clearTimeout(scrollTimer);
+      
+      scrollTimer = setTimeout(() => {
+        content.classList.add('scrollbar-hide');
+      }, 2000); 
+    });
+  }
 
   updateLetterPosition()
   if (props.needLetter) {
@@ -72,8 +80,8 @@ defineExpose({
 </script>
 
 <template>
-    <div class="w-full mx-auto my-4 flex flex-col bg-white rounded-xl shadow-lg relative
-      border border-gray-200 hover:shadow-xl transition-shadow duration-300 max-h-[calc(100vh-64px)] h-fit">
+    <div class="w-full mx-auto flex flex-col bg-white shadow-lg relative
+      border border-gray-200 hover:shadow-xl transition-shadow duration-300 max-h-[calc(100vh)] h-fit">
         <div v-if="$slots.header" class="p-4 sm:p-6 border-b border-gray-200">
           <slot name="header"></slot>
         </div>
