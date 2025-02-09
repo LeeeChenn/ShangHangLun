@@ -36,7 +36,7 @@ const onDownload = () => {
               <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m-6 3.75 3 3m0 0 3-3m-3 3V1.5m6 9h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75" />
             </svg>
             <span class="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-gray-500 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
-              下载全文
+              下载全文(Obsidian)
             </span>
           </span>
           <div class="inline-flex rounded-lg border border-gray-200">
