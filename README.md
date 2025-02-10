@@ -1,6 +1,16 @@
-# Vue 3 + Vite
+<p align="center">
+	<img alt="logo" src="https://github.com/LeeeChenn/ShangHangLun/blob/main/public/img/apple-touch-icon.png?raw=true">
+</p>
+<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">桂林古本伤寒杂病论</h1>
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## 项目介绍
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
-# ShangHangLun
+桂林古本伤寒杂病论搜索工具，支持 Obsidian Markdown 格式文档下载。
+
+## 项目地址
+
+[https://github.com/LeeeChenn/ShangHangLun](https://github.com/LeeeChenn/ShangHangLun)
+
+## 项目截图
+
+![image](https://github.com/LeeeChenn/ShangHangLun/blob/main/public/screenshot/1.png?raw=true)
