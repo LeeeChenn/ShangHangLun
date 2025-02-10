@@ -20,7 +20,11 @@
 
 ## 在线预览
 
-[点击访问](https://leeechenn.github.io/ShangHangLun/)
+[点击访问网页](https://leeechenn.github.io/ShangHangLun/)
+
+### 移动端扫描下方二维码
+
+<img src='https://github.com/LeeeChenn/ShangHangLun/blob/main/public/img/qrcode.png?raw=true' width="200" height="200" />
 
 ## 项目截图
 
