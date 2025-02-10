@@ -5,6 +5,7 @@ import path from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [vue()],
+  base: './', // 打包后文件的根路径
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
