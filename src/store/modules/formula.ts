@@ -11,7 +11,7 @@ export const useFormulaStore = defineStore('formula', {
     actions: {
         async readFormula() {
             try {
-                const response = await fetch('/formula.json');
+                const response = await fetch('./formula.json');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }

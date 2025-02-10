@@ -8,7 +8,7 @@ export const useArticleStore = defineStore('article', {
     actions: {
         async readArticle() {
             try {
-                const response = await fetch('/article.json');
+                const response = await fetch('./article.json');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
