@@ -21,6 +21,7 @@
 ## 项目截图
 
 ![image](https://github.com/LeeeChenn/ShangHangLun/blob/main/public/screenshot/1.jpg?raw=true)
+![image](https://github.com/LeeeChenn/ShangHangLun/blob/main/public/screenshot/2.jpg?raw=true)
 
 ## 前端运行
 
