@@ -18,6 +18,10 @@
 
 桂林古本伤寒杂病论搜索工具，支持 Obsidian Markdown 格式文档下载。
 
+## 在线预览
+
+[点击访问](https://leeechenn.github.io/ShangHangLun/)
+
 ## 项目截图
 
 ![image](https://github.com/LeeeChenn/ShangHangLun/blob/main/public/screenshot/1.jpg?raw=true)
