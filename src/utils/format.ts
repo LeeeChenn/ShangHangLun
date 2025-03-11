@@ -18,7 +18,7 @@ export const formatText = (text: string, data: any) => {
                 if (needOrder) {
                     return `
                         <div key="${index}" class="flex text-base text-gray-800">
-                            <span class="flex-none w-[5em] sm:w-[6em] text-left">${index === 0 ? '【' + (data.ppnum - 4) + '.' + data.num + '】' : ''}</span>
+                            <span class="flex-none w-[5em] sm:w-[6em] text-left">${index === 0 ? (data.isSong ? '<span class="text-red-600">【<span class="text-xs">宋本条文</span>】</span>' : '【' + (data.ppnum - 4) + '.' + data.num + '】') : ''}</span>
                             <span class="flex-1">${line}</span>
                         </div>
                         `
