@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref, nextTick, getCurrentInstance } from 'vue';
 import { PageType } from './pages/type';
+import { type Article } from '@/store/utils';
 // Search
 import Search from '@/components/Search.vue';
 import SearchResultPage from './pages/SearchResult.vue';
@@ -55,13 +56,24 @@ const onSearch = (query: string): boolean => {
   return true;
 }
 
+const articleListRef = ref<{ openArticleFromSearch: (a: Article) => void } | null>(null);
+
+const onOpenArticleFromSearch = (article: Article) => {
+  gotoPage(PageType.List);
+  nextTick(() => {
+    articleListRef.value?.openArticleFromSearch(article);
+  });
+};
+
 </script>
 
 <template>
   <div>
     <ArticleList 
+    ref="articleListRef"
     v-show="current === PageType.List" 
     @goto-page="gotoPage" 
+    @back="back"
     @search="search" />
 
   <FormulaList 
@@ -79,6 +91,7 @@ const onSearch = (query: string): boolean => {
     v-show="current === PageType.Search" 
     @back="back" 
     @goto-page="gotoPage"
+    @open-article="onOpenArticleFromSearch"
     @search="search" />
   </div>
 </template>

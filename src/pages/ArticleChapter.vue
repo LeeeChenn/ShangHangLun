@@ -1,6 +1,6 @@
 <script lang="tsx" setup>
 import Card from '@/components/Card.vue';
-import { type PropType, ref, watch } from 'vue';
+import { type PropType, ref, watch, nextTick } from 'vue';
 import { type Article } from '@/store/utils';
 import Formula from './Formula.vue';
 import PageButton from '@/components/PageButton.vue';
@@ -14,6 +14,11 @@ const props = defineProps({
         type: String,
         required: false,
         default: ''
+    },
+    /** 是否显示左右篇切换（从搜索进入条文时为 false） */
+    showPageNav: {
+        type: Boolean,
+        default: true
     }
 });
 const emit = defineEmits(['back', 'prev', 'next']);
@@ -27,6 +32,17 @@ watch(() => props.datas, () => {
     if (cardRef.value) {
         cardRef.value.scrollToTop();
     }
+});
+
+const scrollToArticle = (articleNum: number) => {
+    nextTick(() => {
+        const el = document.getElementById(`article-block-${articleNum}`);
+        el?.scrollIntoView({ behavior: 'instant', block: 'start' });
+    });
+};
+
+defineExpose({
+    scrollToArticle
 });
 </script>
 
@@ -47,13 +63,14 @@ watch(() => props.datas, () => {
                 <h2 class="text-xl font-bold text-gray-800 px-2 font-serif tracking-wide">{{ header }}</h2>
             </div>
         </template>
-        <div class="fixed left-2 top-1/2 -translate-y-1/2">
+        <div v-if="showPageNav" class="fixed left-2 top-1/2 -translate-y-1/2">
             <PageButton @click="emit('prev')">←</PageButton>
         </div>
-        <div class="fixed right-2 top-1/2 -translate-y-1/2">
+        <div v-if="showPageNav" class="fixed right-2 top-1/2 -translate-y-1/2">
             <PageButton @click="emit('next')">→</PageButton>
         </div>
         <div v-for="(data, index) in datas" :key="index" 
+             :id="'article-block-' + data.num"
              :class="'p-3 mb-2 bg-white ' + (data.ppnum && data.ppnum >= 21 ? '' : 'border-gray-300 border-b border-dashed')">
             <div v-html="formatText(data.text + (data.text1 ? ' ' + data.text1 : ''), data)" class="font-serif tracking-wide leading-relaxed"></div>
             <div 

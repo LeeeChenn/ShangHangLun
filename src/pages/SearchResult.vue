@@ -5,8 +5,7 @@ import Card from '@/components/Card.vue';
 import FormulaDetail from '@/pages/FormulaDetail.vue';
 import { type Formula, type Article } from '@/store/utils';
 import { formatText } from '@/utils/format';
-
-const emit = defineEmits(['back', 'search', 'goto-page']);
+const emit = defineEmits(['back', 'search', 'goto-page', 'open-article']);
 const formulaIsExpanded = ref(true);
 const formulas = ref<Formula[]>([]);
 const articleIsExpanded = ref(true);
@@ -19,7 +18,6 @@ const cardRef = ref<CardExpose | null>(null);
 //
 const currentPage = ref(0); // 0 查询页， 1 方剂详情
 const formulaIndex = ref(0);
-
 const setData = (text: string, results: SearchResult[]) => {
     query.value = text;
     formulas.value = [];
@@ -59,6 +57,9 @@ const handleFormulaClick = (index: number) => {
   formulaIndex.value = index;
 }
 
+const handleArticleClick = (index: number) => {
+  emit('open-article', articles.value[index]);
+}
 /**
  * Detail
  **/
@@ -146,7 +147,8 @@ defineExpose({
                               </svg>
                         </span>
                     </li>
-                    <div v-if="articleIsExpanded" v-for="(article, index) in articles" :key="index" class="p-3 mb-2 bg-white border-gray-300 border-b border-dashed">
+                    <div v-if="articleIsExpanded" v-for="(article, index) in articles" :key="index" class="p-3 mb-2 bg-white border-gray-300 border-b border-dashed cursor-pointer"
+                      @click="handleArticleClick(index)">
                         <div v-html="formatText(article.text, article)" class="font-serif tracking-wide leading-relaxed"></div>
                     </div>
                 </template>

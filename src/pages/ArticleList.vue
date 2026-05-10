@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, type PropType, computed } from 'vue';
+import { ref, computed, nextTick } from 'vue';
 import Card from '@/components/Card.vue';
 import { type Article } from '@/store/utils';
 import { PageType } from './type';
@@ -7,7 +7,7 @@ import ArticleChapter from './ArticleChapter.vue';
 import { useArticleStoreHook } from '@/store/modules/article';
 import MainHeader from '@/components/MainHeader.vue';
 
-const emit = defineEmits(['goto-page', 'search']);
+const emit = defineEmits(['goto-page', 'search', 'back']);
 
 const articles = computed<Article[]>(() => useArticleStoreHook().getArticles);
 const list = computed<Article[]>(() => useArticleStoreHook().getList);
@@ -15,9 +15,13 @@ const currentPage = ref(0); // 0 list, 1 chapter
 const chapterHeader = ref('');
 const currentArticleIndex = ref(0);
 const datas = ref<Article[]>([]);
+const articleChapterRef = ref<{ scrollToArticle: (n: number) => void } | null>(null);
+/** 当前条文页是否由搜索结果进入（返回时应回到搜索页而非书目列表） */
+const enteredChapterFromSearch = ref(false);
 
 const handleClick = (article: Article, index: number) => {
     if (article.isList === 1) return;
+    enteredChapterFromSearch.value = false;
     currentPage.value = 1;
     currentArticleIndex.value = index;
     let ppnum = article.pnum === 0 ? undefined : article.pnum;
@@ -63,6 +67,35 @@ const handleTabClick = () => {
   emit('goto-page', PageType.FormulaList);
 }
 
+/** 从搜索结果进入：打开所属篇并滚动到对应条文 */
+const openArticleFromSearch = (target: Article) => {
+  const idx = list.value.findIndex((L) => {
+    if (L.isList === 1) return false;
+    const pp = L.pnum === 0 ? undefined : L.pnum;
+    return L.num === target.pnum && pp === target.ppnum;
+  });
+  if (idx < 0) return;
+  handleClick(list.value[idx], idx);
+  enteredChapterFromSearch.value = true;
+  nextTick(() => {
+    articleChapterRef.value?.scrollToArticle(target.num);
+  });
+};
+
+const onChapterBack = () => {
+  if (enteredChapterFromSearch.value) {
+    enteredChapterFromSearch.value = false;
+    emit('back');
+    currentPage.value = 0;
+    return;
+  }
+  currentPage.value = 0;
+};
+
+defineExpose({
+  openArticleFromSearch
+});
+
 </script>
 
 <template>
@@ -90,9 +123,11 @@ const handleTabClick = () => {
       </ul>
     </Card>
     <ArticleChapter v-if="currentPage === 1" 
+      ref="articleChapterRef"
       :datas="datas" 
       :header="chapterHeader" 
-      @back="currentPage = 0" 
+      :show-page-nav="!enteredChapterFromSearch"
+      @back="onChapterBack" 
       @prev="prevArticle" 
       @next="nextArticle" />
   </div>
